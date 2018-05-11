@@ -19,7 +19,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hatchway-redis-master
+  name: redis-master
   # these labels can be applied automatically
   # from the labels in the pod template if not set
   # labels:
@@ -45,8 +45,8 @@ spec:
         tier: backend
     spec:
       containers:
-      - name: hatchway-master
-        image: harbor.mylab.com/library/redis:e2e  # or just image: redis
+      - name: master
+        image: gcr.io/google_containers/redis:e2e  # or just image: redis
         resources:
           requests:
             cpu: 100m
@@ -81,7 +81,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hatchway-redis-slave
+  name: redis-slave
   # these labels can be applied automatically
   # from the labels in the pod template if not set
   # labels:
@@ -107,8 +107,8 @@ spec:
         tier: backend
     spec:
       containers:
-      - name: hatchway-slave
-        image: harbor.mylab.com/library/gb-redisslave:v1
+      - name: slave
+        image: gcr.io/google_samples/gb-redisslave:v1
         resources:
           requests:
             cpu: 100m
@@ -134,14 +134,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hatchway-frontend
+  name: frontend
   labels:
     app: guestbook
     tier: frontend
 spec:
   # if your cluster supports it, uncomment the following to automatically create
   # an external load-balanced IP for the frontend service.
-  type: LoadBalancer
+  type: NodePort
   ports:
     # the port that this service should serve on
   - port: 80
@@ -152,7 +152,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hatchway-frontend
+  name: frontend
   # these labels can be applied automatically
   # from the labels in the pod template if not set
   # labels:
@@ -175,8 +175,8 @@ spec:
         tier: frontend
     spec:
       containers:
-      - name: hatchway-php-redis
-        image: harbor.mylab.com/library/gb-frontend:v4
+      - name: php-redis
+        image: gcr.io/google-samples/gb-frontend:v4
         resources:
           requests:
             cpu: 100m
