@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+  name: nsx-demo-policy
+spec:
+  podSelector:
+    matchLabels:
+      tier: frontend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+      - podSelector:
+          matchLabels:
+            role: master
+    ports:
+      - port: 80
+        protocol: TCP
+
+  egress:
